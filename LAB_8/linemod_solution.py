@@ -47,10 +47,9 @@ def autocrop(src):
 
 # Create linemod detector
 def create_linemod_detector():
-    pyramid = [4, 2, 1] 
+    pyramid = [4, 2, 1]
     modals = [cv2.linemod.Modality.create("ColorGradient")]
     detector = cv2.linemod.Detector(modals, pyramid)
-    print("Detector created", detector)
     return detector
 
 def main(tpath, threshold, ipath):
@@ -60,7 +59,7 @@ def main(tpath, threshold, ipath):
     
     cnt = 0
     detector = create_linemod_detector()
-    print("Load templates")
+
     # Load templates
     while True:
         tfile = os.path.join(tpath, f'template{cnt:04d}.png')
@@ -101,28 +100,13 @@ def main(tpath, threshold, ipath):
         sources = [img]
         matches = detector.match(sources, threshold)
 
-        # Replace the matches processing block in main()
-    print("length of matches:", len(matches))
-    if matches:
-        for match in matches:
-            # Access Match object properties correctly
-            print("match:",match)
-            print("type match",type(match))
+        if matches:
+            i = 0
+            cv2.imshow("template", templates[int(matches[i].class_id)])
 
-            # extract data  from tuple 
-            match = match[0]
-
-            match_id = match.template_id
-            score = match.similarity
-            x = match.x
-            y = match.y
+            cv2.circle(img, (matches[i].x, matches[i].y), 8, (0, 255, 0), -1)
             
-            print(f"Template ID: {match_id}, Score: {score}, Position: ({x}, {y})")
-            
-            cv2.imshow("template", templates[match_id])
-            cv2.circle(img, (int(x), int(y)), 8, (0, 255, 0), -1)
-        
-            pfile = os.path.join(tpath, f'template{match_id:04d}_pose.txt')
+            pfile = os.path.join(tpath, f'template{int(matches[i].class_id):04d}_pose.txt')
             if os.path.exists(pfile):
                 with open(pfile, 'r') as posefile:
                     m = np.loadtxt(posefile).reshape(4, 4)
@@ -133,15 +117,6 @@ def main(tpath, threshold, ipath):
             cv2.imshow("img", img)
             cv2.waitKey(0)
 
-
-# to execute:
-# python linemod_template.py ./templates 55 ./files/*.png
-# 55 is the threshold of matching 
-# the pyramid enables us o fist do a scan large (4)
-# then second medium 
-# then 1 for a specific spot to sum up we search by zone
-
-# reuslt: the id of template with the test image, the score  matching with 
 if __name__ == "__main__":
     import sys
     if len(sys.argv) < 4:
