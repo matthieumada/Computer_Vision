@@ -34,7 +34,7 @@ def spatial_filter(input_cloud):
 
 def main(): ### Try other parameters for the filters to see how they affcet the results ###
     # Load pointcloud (unfiltered)
-    cloud = o3d.io.read_point_cloud('/home/delinm/Documents/Robotics_Computer_Vision/Computer_Vision/LAB_5/cloud.pcd')
+    cloud = o3d.io.read_point_cloud('/home/delinm/Documents/Computer_Vision/LAB_5/cloud.pcd')
 
     # Show
     o3d.visualization.draw_geometries([cloud], window_name = 'Pointcloud before filtering')
