@@ -50,7 +50,7 @@ def compute_surface_normals(obj, scn):
     Link: https://www.open3d.org/docs/release/tutorial/geometry/pointcloud.html 
     (Under Vertex normal estimation is an example, but I recommend using search_param=o3d.geometry.KDTreeSearchParamKNN instead of HybridParam).
     """
-    search_param = o3d.geometry.KDTreeSearchParamKNN(30)
+    search_param = o3d.geometry.KDTreeSearchParamKNN(10) # mine 30
     obj.estimate_normals(search_param= search_param)
     scn.estimate_normals(search_param= search_param)
     return
@@ -65,8 +65,8 @@ def compute_shape_features(obj, scn):
     Hint: Use `compute_fpfh_feature` with a `KDTreeSearchParamRadius`.
     Link: https://www.open3d.org/docs/release/python_api/open3d.pipelines.registration.compute_fpfh_feature.html
     """
-    obj_features = o3d.pipelines.registration.compute_fpfh_feature(obj, search_param = o3d.geometry.KDTreeSearchParamRadius(1.5))
-    scn_features = o3d.pipelines.registration.compute_fpfh_feature(scn, search_param = o3d.geometry.KDTreeSearchParamRadius(1.5))
+    obj_features = o3d.pipelines.registration.compute_fpfh_feature(obj, search_param = o3d.geometry.KDTreeSearchParamRadius(0.05)) # mine 1.5 for both 
+    scn_features = o3d.pipelines.registration.compute_fpfh_feature(scn, search_param = o3d.geometry.KDTreeSearchParamRadius(0.05))
     return obj_features, scn_features
 
 def find_feature_matches(obj_features, scn_features):
@@ -248,18 +248,18 @@ def main():
 #     criteria=o3d.pipelines.registration.RANSACConvergenceCriteria(it, 1000)
 # )
 
-# Show result info
-    print("Transformation:")
-    print(result.transformation)
-    print("Inlier RMSE:", result.inlier_rmse)
-    print("Fitness:", result.fitness)
+# # Show result info
+#     print("Transformation:")
+#     print(result.transformation)
+#     print("Inlier RMSE:", result.inlier_rmse)
+#     print("Fitness:", result.fitness)
 
-# Apply pose to object
-    obj_ransac = obj_copy = obj.copy()
-    obj_ransac.transform(result.transformation)
+# # Apply pose to object
+#     obj_ransac = obj_copy = obj.copy()
+#     obj_ransac.transform(result.transformation)
 
-# Visualize
-    o3d.visualization.draw_geometries([obj_ransac, scn], window_name="RANSAC Result")
+# # Visualize
+#     o3d.visualization.draw_geometries([obj_ransac, scn], window_name="RANSAC Result")
     
 
 

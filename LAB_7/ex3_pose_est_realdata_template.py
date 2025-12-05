@@ -103,18 +103,18 @@ def RANSAC(obj, scn):
     # Show result
     show_pointclouds(obj, scn, window_name='After global alignment')
 
-# Show result info
-    print("Transformation:")
-    print(result.transformation)
-    print("Inlier RMSE:", result.inlier_rmse)
-    print("Fitness:", result.fitness)
+# # Show result info
+#     print("Transformation:")
+#     print(result.transformation)
+#     print("Inlier RMSE:", result.inlier_rmse)
+#     print("Fitness:", result.fitness)
 
-# Apply pose to object
-    obj_ransac = obj_copy = obj.copy()
-    obj_ransac.transform(result.transformation)
+# # Apply pose to object
+#     obj_ransac = obj_copy = obj.copy()
+#     obj_ransac.transform(result.transformation)
 
-# Visualize
-    o3d.visualization.draw_geometries([obj_ransac, scn], window_name="RANSAC Result")
+# # Visualize
+#     o3d.visualization.draw_geometries([obj_ransac, scn], window_name="RANSAC Result")
     return obj, scn
 
 def ICP(obj, scn):
